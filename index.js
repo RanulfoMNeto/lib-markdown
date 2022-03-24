@@ -1,17 +1,35 @@
 import chalk from 'chalk';
+import * as fs from 'fs';
 
-//encadear métodos para colorir texto, cor de fundo e texto em negrito
-console.log(chalk.blue.bgWhite.bold('Alura'));
+function trataErro(erro) {
+    throw new Error(chalk.red(erro.code, 'nao ha arquivo no caminho'));
+}
 
-//receber múltiplos argumentos
-console.log(chalk.blue('curso', 'de', 'NodeJS'));
+async function pegaArquivo(caminhoDoArquivo) {
+    const encoding = 'utf-8';
+    try {
+        const texto = await fs.promises.readFile(caminhoDoArquivo, encoding);
+        console.log(chalk.green(texto));
+    } catch (erro) {
+        trataErro(erro);
+    }
+}
 
-//métodos aninhados
-console.log(chalk.red('vermelho', chalk.underline.bgBlue('azul')));
+// function pegaArquivo(caminhoDoArquivo) {
+//     const encoding = 'utf-8';
+//     fs.promises.readFile(caminhoDoArquivo, encoding)
+//         .then((texto) => console.log(chalk.yellow(texto)))
+//         .catch((erro) => trataErro(erro));
+// }
 
-// uso de template strings e placeholders
-console.log(`
-CPU: ${chalk.red('90%')}
-RAM: ${chalk.green('40%')}
-DISK: ${chalk.yellow('70%')}
-`);
+// function pegaArquivo(caminhoDoArquivo) {
+//     const encoding = 'utf-8';
+//     fs.readFile(caminhoDoArquivo, encoding, (erro, texto) => {
+//         if (erro) {
+//             trataErro(erro);
+//         }
+//         console.log(chalk.green(texto));
+//     })
+// }
+
+pegaArquivo('./arquivos/texto1.md');
